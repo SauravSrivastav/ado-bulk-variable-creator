@@ -1,6 +1,8 @@
 # Detailed Instructions for Azure DevOps Bulk Variable Creator
 
 This document provides a step-by-step guide on how to use the Azure DevOps Bulk Variable Creator to add multiple variables to a Variable Group using Azure DevOps CLI.
+![image](https://github.com/user-attachments/assets/9ff7139f-6f30-4af1-a2de-c48a7d1f9379)
+
 
 ## Step 0: Login to Azure DevOps from Command Line
 
