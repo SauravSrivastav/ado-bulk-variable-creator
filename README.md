@@ -1,69 +1,112 @@
-# Azure DevOps Bulk Variable Creator
+# ADO Bulk Variable Creator
 
-This project automates the process of adding multiple variables to an Azure DevOps Variable Group using Azure DevOps CLI. It's particularly useful when you need to add a large number of variables from an Excel sheet to a Variable Group.
+> Automate bulk creation of Azure DevOps Variable Group variables from Excel/CSV — eliminate manual entry for 100s of secrets using Azure DevOps CLI.
 
-## Table of Contents
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Setup](#setup)
-- [Usage](#usage)
-- [File Structure](#file-structure)
-- [Contributing](#contributing)
-- [Contact](#contact)
+[![Azure DevOps](https://img.shields.io/badge/Azure_DevOps-Automation-0078D4?style=flat-square&logo=azure-devops&logoColor=white)](https://dev.azure.com)
+[![Bash](https://img.shields.io/badge/Bash-Script-4EAA25?style=flat-square&logo=gnu-bash&logoColor=white)](https://www.gnu.org/software/bash)
+[![Azure CLI](https://img.shields.io/badge/Azure_CLI-Tool-0078D4?style=flat-square&logo=microsoft-azure&logoColor=white)](https://docs.microsoft.com/cli/azure)
 
-## Features
-- Automates the creation of multiple variables in an Azure DevOps Variable Group
-- Utilizes Excel formulas to generate Azure DevOps CLI commands
-- Reduces manual data entry and potential for human error
+---
+
+## Overview
+
+**ADO Bulk Variable Creator** automates the tedious process of adding hundreds of variables to Azure DevOps Variable Groups — parsing an Excel/CSV source and creating all variables via Azure DevOps CLI in a single script run.
+
+Saves hours of manual work for teams migrating secrets, setting up new environments, or syncing configuration across projects.
+
+---
+
+## Use Cases
+
+- **Environment setup** — Populate Variable Groups from scratch for new projects
+- **Secret migration** — Move secrets from Excel/CSV exports to Azure DevOps
+- **Multi-environment sync** — Create same variables across Dev, Test, Prod groups
+- **Onboarding automation** — Standardize Variable Group setup across teams
+
+---
+
+## How It Works
+
+```
+Excel/CSV File
+    │
+    ▼
+Bash Script (bulk_variable_creator.sh)
+    │
+    ▼
+Azure DevOps CLI (az devops)
+    │
+    ▼
+Variable Group — variables created in bulk
+```
+
+---
+
+## Files
+
+| File | Description |
+|------|-------------|
+| `bulk_variable_creator.sh` | Main automation script |
+| `DETAILED_INSTRUCTIONS.md` | Step-by-step setup guide |
+| `README.md` | This file |
+
+---
 
 ## Prerequisites
-- Azure CLI installed
-- Azure DevOps CLI extension installed
-- Microsoft Excel
-- Access to Azure DevOps with appropriate permissions
 
-## Setup
-1. Install Azure CLI from [here](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-2. Install Azure DevOps CLI extension:
-   ```
-   az extension add --name azure-devops
-   ```
-3. Authenticate with Azure DevOps:
-   ```
-   az login
-   ```
-   or use a Personal Access Token (PAT) for authentication
+```bash
+# Install Azure CLI
+brew install azure-cli         # macOS
+# or
+winget install Microsoft.AzureCLI  # Windows
 
-## Usage
-1. Set default organization and project:
-   ```
-   az devops configure -d organization=https://dev.azure.com/<OrganizationName>
-   az devops configure -d project=<ProjectName>
-   ```
-2. Create a Variable Group in Azure DevOps portal
-3. Retrieve the Variable Group ID
-4. Use the Excel formula provided in `generate_commands.xlsx` to create CLI commands
-5. Execute the generated commands using `bulk_variable_creator.sh`
+# Install Azure DevOps extension
+az extension add --name azure-devops
 
-For detailed instructions, refer to [DETAILED_INSTRUCTIONS.md](./DETAILED_INSTRUCTIONS.md)
+# Authenticate
+az login
+az devops configure --defaults organization=https://dev.azure.com/YOUR-ORG project=YOUR-PROJECT
+```
 
-## File Structure
-- `README.md`: This file
-- `bulk_variable_creator.sh`: Shell script to execute Azure DevOps CLI commands
-- `generate_commands.xlsx`: Excel file with formula to generate CLI commands
-- `DETAILED_INSTRUCTIONS.md`: Detailed explanation of the process
+---
 
-## Contributing
-Contributions to improve the Azure DevOps Bulk Variable Creator are welcome. Please follow these steps:
-1. Fork the repository
-2. Create a new branch for your feature
-3. Commit your changes
-4. Push to your branch
-5. Create a new Pull Request
+## Quick Start
 
-## Contact
+```bash
+git clone https://github.com/SauravSrivastav/ado-bulk-variable-creator.git
+cd ado-bulk-variable-creator
 
-Have questions or suggestions? Reach out to us:
-- 📧 Email: [Sauravsrivastav2205@gmail.com](mailto:Sauravsrivastav2205@gmail.com)
-- 💼 LinkedIn: [in/sauravsrivastav2205](https://www.linkedin.com/in/sauravsrivastav2205)
-- 🐙 GitHub: [https://github.com/SauravSrivastav](https://github.com/SauravSrivastav)
+# Edit the script with your Variable Group name and CSV path
+chmod +x bulk_variable_creator.sh
+./bulk_variable_creator.sh
+```
+
+---
+
+## Script Overview
+
+```bash
+# bulk_variable_creator.sh
+while IFS=',' read -r name value secret; do
+  az pipelines variable-group variable create \
+    --group-id $GROUP_ID \
+    --name "$name" \
+    --value "$value" \
+    --secret $secret
+done < variables.csv
+```
+
+> Full guide with Excel formula templates in [DETAILED_INSTRUCTIONS.md](./DETAILED_INSTRUCTIONS.md)
+
+---
+
+## Built By
+
+**Saurav Srivastav** — DevOps Manager at Emirates Flight Catering | Azure DevOps · Automation · DevSecOps | Dubai, UAE
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=flat-square&logo=linkedin)](https://www.linkedin.com/in/sauravsrivastav2205/)
+[![Portfolio](https://img.shields.io/badge/Portfolio-Visit-0078D4?style=flat-square&logo=vercel)](https://saurav-srivastav-portfolio.vercel.app)
+
+---
+
+<sub>Azure DevOps · Azure CLI · Bash · Automation · DevSecOps · Variable Groups · Secrets · CI/CD · DevOps · Dubai UAE</sub>
